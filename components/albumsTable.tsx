@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 type Album = {
   id: string;
   title: string;
+  user_id: string;
   description: string;
 };
 
@@ -50,6 +51,9 @@ const AlbumsTable = ({ albums }: AlbumsTableProps) => {
                 Description
               </th>
               <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
+                User ID
+              </th>
+              <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
                 Actions
               </th>
             </tr>
@@ -62,6 +66,9 @@ const AlbumsTable = ({ albums }: AlbumsTableProps) => {
                 </td>
                 <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
                   {album.description}
+                </td>
+                <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
+                  {album.user_id}
                 </td>
                 <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
                   <button

@@ -69,7 +69,7 @@ const Sidebar = ({ isAuthenticated }: SidebarProps) => {
               <ul className="space-y-4">
                 <li>
                   <button
-                    onClick={() => (window.location.href = "/dashboard")}
+                    onClick={() => (window.location.href = "/protected")}
                     className={menuItemClasses}
                   >
                     Dashboard

@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
+  const username = formData.get("username")?.toString();
   const password = formData.get("password")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
@@ -23,6 +24,9 @@ export const signUpAction = async (formData: FormData) => {
     email,
     password,
     options: {
+      data: {
+      username, // Custom field added to user_metadata
+    },
       emailRedirectTo: `${origin}/api/auth/callback`,
     },
   });
@@ -132,6 +136,15 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
+
+export const updateUserUserName = async () => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      username: "new_username", // Update custom metadata
+    },
+  });
+}
 
 export const createAlbumAction = async (formData: FormData, userId: string) => {
   const title = formData.get("title")?.toString();

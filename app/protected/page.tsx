@@ -35,7 +35,7 @@ export default async function DashboardPage() {
   return (
     <div className="flex-1 w-full flex flex-col gap-8">
       {/* User Greeting Section */}
-      <h2 className="font-bold text-2xl mb-4">Hey, {user.email} 👋</h2>
+      <h2 className="font-bold text-2xl mb-4">Hey, {user?.user_metadata?.username} 👋</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
       {cardsData.map((card, index) => (
         <Card key={index} title={card.title} description={card.description} />
