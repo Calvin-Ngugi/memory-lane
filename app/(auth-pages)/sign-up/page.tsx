@@ -20,7 +20,7 @@ export default async function Signup(props: {
 
   return (
     <>
-      <form className="flex flex-col min-w-[30vw] mx-auto">
+      <form className="flex flex-col mt-16 min-w-[30vw] mx-auto">
         <h1 className="text-2xl font-medium">Sign up</h1>
         <p className="text-sm text text-foreground">
           Already have an account?{" "}
@@ -29,10 +29,10 @@ export default async function Signup(props: {
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="username">UserName</Label>
-          <Input name="username" placeholder="username" required />
           <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
+          <Input type="text" name="email" placeholder="you@example.com" required />
+          <Label htmlFor="username">Phone Number</Label>
+          <Input type="text" name="phone" placeholder="phone number" required />
           <Label htmlFor="password">Password</Label>
           <Input
             type="password"

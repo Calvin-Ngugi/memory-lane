@@ -67,3 +67,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Add this to your Tailwind CSS configuration or apply it directly in the component */
+.toast-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-exit {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+}

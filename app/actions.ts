@@ -132,3 +132,26 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
+
+export const createAlbumAction = async (formData: FormData, userId: string) => {
+  const title = formData.get("title")?.toString();
+  const description = formData.get("description")?.toString();
+
+  if (!title) {
+    throw new Error("Title is required.");
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("albums")
+    .insert([{ title, description, user_id: userId }])
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error("Error creating album:", error.message);
+    throw new Error(error.message);
+  }
+
+  return data;
+}
