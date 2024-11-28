@@ -4,43 +4,63 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
-  const username = formData.get("username")?.toString();
   const password = formData.get("password")?.toString();
+  const username = formData.get("username")?.toString();
+  const phone = formData.get("phone")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
-  if (!email || !password) {
+  if (!email || !password || !username) {
     return encodedRedirect(
       "error",
       "/sign-up",
-      "Email and password are required",
+      "Email, password, and username are required"
     );
   }
 
-  const { error } = await supabase.auth.signUp({
+  // Sign up the user in Supabase Auth
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
+    phone,
     options: {
       data: {
-      username, // Custom field added to user_metadata
-    },
+        username, 
+      },
       emailRedirectTo: `${origin}/api/auth/callback`,
     },
   });
 
-  if (error) {
-    console.error(error.code + " " + error.message);
-    return encodedRedirect("error", "/sign-up", error.message);
-  } else {
+  if (signUpError) {
+    return encodedRedirect("error", "/sign-up", signUpError.message);
+  }
+
+  // Insert into the public.users table
+  const { error: usersError } = await supabase.from("users").insert({
+    user_id: signUpData.user?.id,
+    email,
+    username,
+    phone,
+  });
+
+  if (usersError) {
+    console.error("Error creating user in public.users:", usersError.message);
     return encodedRedirect(
-      "success",
+      "error",
       "/sign-up",
-      "Thanks for signing up! Please check your email for a verification link.",
+      "Could not complete sign-up process"
     );
   }
+
+  return encodedRedirect(
+    "success",
+    "/sign-up",
+    "Thanks for signing up! Please check your email for a verification link."
+  );
 };
 
 export const signInAction = async (formData: FormData) => {
@@ -137,15 +157,6 @@ export const signOutAction = async () => {
   return redirect("/sign-in");
 };
 
-export const updateUserUserName = async () => {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.updateUser({
-    data: {
-      username: "new_username", // Update custom metadata
-    },
-  });
-}
-
 export const createAlbumAction = async (formData: FormData, userId: string) => {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
@@ -167,4 +178,42 @@ export const createAlbumAction = async (formData: FormData, userId: string) => {
   }
 
   return data;
+}
+
+export async function uploadImage(formData: FormData) {
+  const supabase = await createClient();
+
+  const file = formData.get("file") as File;
+  const title = formData.get("title") as string;
+  const albumId = formData.get("album_id") as string;
+
+  if (!file || !title || !albumId) {
+    throw new Error("All fields (file, title, album_id) are required.");
+  }
+
+  // Convert file to Base64
+  const arrayBuffer = await file.arrayBuffer();
+  const base64Image = Buffer.from(arrayBuffer).toString("base64");
+  const base64DataURL = `data:${file.type};base64,${base64Image}`;
+
+  // Insert the image data into the Supabase `photos` table
+  const { data, error } = await supabase
+    .from("photos")
+    .insert({
+      name: file.name,
+      title,
+      image_url: base64DataURL,
+      album_id: albumId,
+    })
+    .select();
+
+  if (error) {
+    console.error("Upload failed:", error.message);
+    throw new Error("Failed to upload the image. Please try again.");
+  }
+
+  // Revalidate the path for real-time updates
+  revalidatePath("/protected/albums/[id]/images");
+
+  return { message: "Image uploaded successfully!", photo: data[0] };
 }

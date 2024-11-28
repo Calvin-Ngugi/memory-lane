@@ -86,6 +86,14 @@ const Sidebar = ({ isAuthenticated }: SidebarProps) => {
                       </button>
                     </li>
                     <li>
+                      <button
+                        onClick={() => (window.location.href = "/protected/users")}
+                        className={menuItemClasses}
+                      >
+                        Users
+                      </button>
+                    </li>
+                    <li>
                       <SubmitButton
                         onClick={signOutAction}
                         className="w-full text-left px-4 py-2 rounded"

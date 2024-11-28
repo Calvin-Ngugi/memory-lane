@@ -1,29 +1,23 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
 
-type Album = {
+type User = {
   id: string;
-  title: string;
-  user_id: string;
-  description: string;
+  email: string;
+  username: string;
+  phone: string;
 };
 
-type AlbumsTableProps = {
-  albums: Album[];
+type UsersTableProps = {
+  users: User[];
 };
 
-const AlbumsTable = ({ albums }: AlbumsTableProps) => {
-  const router = useRouter();
+const UsersTable = ({ users }: UsersTableProps) => {
   const { theme } = useTheme();
 
-  const handleViewAlbum = (id: string) => {
-    router.push(`/protected/albums/${id}`);
-  };
-
-  if (!albums || albums.length === 0) {
-    return <div className="mt-6 text-gray-500">No albums found.</div>;
+  if (!users || users.length === 0) {
+    return <div className="mt-6 text-gray-500">No users found.</div>;
   }
 
   // Define styles for light and dark modes
@@ -45,38 +39,33 @@ const AlbumsTable = ({ albums }: AlbumsTableProps) => {
           <thead>
             <tr className={`${tableHeaderClasses} text-left`}>
               <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
-                Title
+                ID
               </th>
               <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
-                Description
+                Username
               </th>
               <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
-                User ID
+                Email
               </th>
               <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
-                Actions
+                Phone number
               </th>
             </tr>
           </thead>
           <tbody>
-            {albums.map((album) => (
-              <tr key={album.id} className="transition-colors">
+            {users.map((user) => (
+              <tr key={user.id} className="transition-colors">
                 <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
-                  {album.title}
+                  {user.id}
                 </td>
                 <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
-                  {album.description}
+                  {user.username}
                 </td>
                 <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
-                  {album.user_id}
+                  {user.email}
                 </td>
                 <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
-                  <button
-                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                    onClick={() => handleViewAlbum(album.id)}
-                  >
-                    View Album
-                  </button>
+                  {user.phone}
                 </td>
               </tr>
             ))}
@@ -88,4 +77,4 @@ const AlbumsTable = ({ albums }: AlbumsTableProps) => {
 };
 
 
-export default AlbumsTable;
+export default UsersTable;
