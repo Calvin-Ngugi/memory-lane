@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 
-export const POST = async (req: Request, { params }: { params: { id: string } }) => {
+export const POST = async (req: Request, props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   const formData = await req.formData();
   const file = formData.get("file") as File;
 

@@ -1,7 +1,8 @@
 import { UploadForm } from "@/components/upload-form";
 
 // Pass album ID dynamically via params
-export default function UploadPage({ params }: { params: { id: string } }) {
+export default async function UploadPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const albumId = params.id;
 
   return (

@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 
 // Fetch a single album by ID
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const supabase = await createClient();
   const { id } = params;
 
@@ -20,7 +21,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
 // Update an album
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const supabase = await createClient();
   const { id } = params;
   const body = await req.json();
@@ -38,7 +40,8 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 }
 
 // Delete an album
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const supabase = await createClient();
   const { id } = params;
 

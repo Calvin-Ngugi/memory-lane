@@ -4,9 +4,10 @@ import { ImagesList } from "@/components/images-list";
 import { createClient } from "@/utils/supabase/server";
 
 // Fetch images dynamically based on the album ID
-export default async function ImagesPage({ params }: { params: { id: string } }) {
+export default async function ImagesPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const supabase = await createClient();
-  const albumId = params.id;
+  const albumId = await params.id;
   // Fetch authenticated user
   const { data: { user }, error: userError } = await supabase.auth.getUser();
 
