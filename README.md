@@ -1,96 +1,134 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Memory Lane
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
-
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+A dynamic and user-friendly Album Gallery Manager built with **Next.js** and **Supabase**, providing seamless CRUD operations for managing albums and images. The app allows users to browse images, edit metadata (e.g., titles), and upload new images for their albums.
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+- **Dynamic Album-Based Image Management**  
+  - Fetch and display images for a specific album.
+  - Edit image titles dynamically through a modal interface.
 
-## Demo
+- **Authentication and Authorization**  
+  - Restrict access to authenticated users.
+  - Ensure only album owners can upload new images.
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+- **Responsive Design**  
+  - Images displayed in a grid layout optimized for various screen sizes.
+  - Interactive modal for viewing and editing image details.
 
-## Deploy to Vercel
+- **CRUD Operations**  
+  - Fetch album and image data from Supabase.
+  - Update image metadata (e.g., titles) via modal.
+  - Upload new images (if authorized).
 
-Vercel deployment will guide you through creating a Supabase account and project.
+## Tech Stack
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+- **Frontend**: [Next.js](https://nextjs.org), [React](https://reactjs.org)
+- **Backend**: [Supabase](https://supabase.io)
+- **UI Components**: Tailwind CSS, Custom Dialog Component
+- **Icons**: [Lucide Icons](https://lucide.dev)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+## Prerequisites
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+Ensure you have the following installed:
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+- Node.js (>= 16.x)
+- npm or yarn
+- A Supabase project (with tables for albums and images)
 
-## Clone and run locally
+## Getting Started
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
-
-2. Create a Next.js app using the Supabase Starter template npx command
-
+1. **Clone the Repository**:
    ```bash
-   npx create-next-app -e with-supabase
+   git clone https://github.com/your-username/image-gallery-manager.git
+   cd image-gallery-manager
    ```
 
-3. Use `cd` to change into the app's directory
+2. **Install Dependencies**:
+```bash
+  npm install
+```
 
-   ```bash
-   cd name-of-new-app
-   ```
+3. **Set Up Environment Variables**:
+Create a .env.local file and add your Supabase project details:
+```bash
+  NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
+  NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+```
 
-4. Rename `.env.example` to `.env.local` and update the following:
+4. **Run the Development Server**:
+```bash
+  npm run dev
+```
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+5. **Access the App**:
+Open http://localhost:3000 in your browser.
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
 
-5. You can now run the Next.js local development server:
+## Supabase Database Schema
 
-   ```bash
-   npm run dev
-   ```
+### `albums` Table
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+This table stores information about image albums created by users.
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+| Column        | Type      | Description                          |
+|---------------|-----------|--------------------------------------|
+| `id`          | `UUID`    | Unique identifier for the album.     |
+| `title`       | `String`  | Title of the album.                  |
+| `description` | `String`  | Description of the album.            |
+| `user_id`     | `UUID`    | ID of the album's owner.             |
+| `created_at`  | `Timestamp` | The date and time the album was created. |
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+### `photos` Table
 
-## Feedback and issues
+This table stores information about individual photos associated with albums.
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+| Column        | Type      | Description                         |
+|---------------|-----------|-------------------------------------|
+| `id`          | `UUID`    | Unique identifier for the photo.    |
+| `album_id`    | `UUID`    | ID of the associated album.         |
+| `image_url`   | `String`  | URL of the uploaded image.          |
+| `title`       | `String`  | Title or description of the image.  |
+| `name`        | `String`  | File name of the image.             |
+| `created_at`  | `Timestamp` | The date and time the photo was uploaded. |
 
-## More Supabase examples
+### Relationships
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+- **`albums.user_id` → `users.id`**: Links an album to the user who created it.
+- **`photos.album_id` → `albums.id`**: Associates a photo with its album.
+
+## Key Components
+
+### Landing Page
+Gives the user some idea of the application
+
+### Authentication pages
+This includes the sign up, sign in, forgot password and password reset pages.
+
+### Dashboard/Protected
+The main page once you are logged in. Handles:
+
+Displays the user logged in's details such as email and username.
+Displays the users in the sytem and their album count.
+Displays the user logged in's albums.
+
+### AlbumList
+Displays a list of all the albums
+
+### UserList
+Displays a list of all the users
+
+### ImagesList
+Displays a grid of images for a given album. Each image can be clicked to open the ImageModal for editing.
+
+### ImageModal
+A modal interface that allows users to:
+
+View a larger version of the image.
+Edit the title of the image and save changes.
+
+### ImagesPage
+The main page for fetching and displaying images for an album. Handles:
+
+Loading album and image data from Supabase.
+
