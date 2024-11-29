@@ -1,12 +1,15 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation"; // Use `useRouter` for client-side navigation
+import { Button } from "./ui/button";
 
 type User = {
   id: string;
   email: string;
   username: string;
   phone: string;
+  albumCount: number;
 };
 
 type UsersTableProps = {
@@ -15,13 +18,18 @@ type UsersTableProps = {
 
 const UsersTable = ({ users }: UsersTableProps) => {
   const { theme } = useTheme();
+  const router = useRouter(); // Initialize `useRouter`
 
   if (!users || users.length === 0) {
     return <div className="mt-6 text-gray-500">No users found.</div>;
   }
 
+  const handleViewUser = (id: string) => {
+    router.push(`/protected/users/${id}`); // Client-side navigation
+  };
+
   // Define styles for light and dark modes
-  const isDarkMode = theme != "light";
+  const isDarkMode = theme !== "light";
   const tableWrapperClasses = isDarkMode
     ? "rounded bg-gray-800 text-gray-100 p-4"
     : "rounded bg-gray-100 text-gray-900 p-4";
@@ -50,6 +58,12 @@ const UsersTable = ({ users }: UsersTableProps) => {
               <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
                 Phone number
               </th>
+              <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
+                Album count
+              </th>
+              <th className={`py-2 px-4 font-semibold border ${tableCellBorderClasses}`}>
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +81,17 @@ const UsersTable = ({ users }: UsersTableProps) => {
                 <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
                   {user.phone}
                 </td>
+                <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
+                  {user.albumCount}
+                </td>
+                <td className={`border px-4 py-2 text-left ${tableCellBorderClasses}`}>
+                  <Button
+                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                    onClick={() => handleViewUser(user.id)}
+                  >
+                    View User
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -75,6 +100,5 @@ const UsersTable = ({ users }: UsersTableProps) => {
     </div>
   );
 };
-
 
 export default UsersTable;

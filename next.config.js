@@ -5,7 +5,8 @@ const nextConfig = {
       domains: [
         "res.cloudinary.com", 
         "nationaltoday.com", 
-        "cdn.shopify.com"
+        "cdn.shopify.com",
+        "encrypted-tbn0.gstatic.com"
       ],
     },
   };

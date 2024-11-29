@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import CreateAlbumModal from "@/components/createAlbumModal";
 import AlbumsTable from "@/components/albumsTable";
 import Card from "@/components/ui/card";
+import UsersTable from "@/components/users-table";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -31,6 +32,7 @@ export default async function DashboardPage() {
     console.error("Error fetching albums:", error.message);
   }
 
+  //ferch user data from public users
   const { data: fetchedUser } = await supabase
     .from("users")
     .select("*")
@@ -43,7 +45,7 @@ export default async function DashboardPage() {
   // Fetch users and their album counts
   const { data: usersWithAlbumCount, error: usersError } = await supabase
     .from("users")
-    .select("id, username, email, albums (id)");
+    .select("*, albums (id)");
 
   if (usersError) {
     console.error("Error fetching users with album count:", usersError.message);
@@ -69,26 +71,7 @@ export default async function DashboardPage() {
         <h2 className="font-bold text-2xl mb-4">Users in the System</h2>
         <p>These are all the users in the system with their album count:</p>
         {usersWithAlbumCount?.length ? (
-          <div className="overflow-auto rounded bg-gray-800 text-gray-100 p-4">
-            <table className="w-full text-sm border-collapse border border-gray-600">
-              <thead>
-                <tr className="bg-gray-100 text-gray-800 text-left">
-                  <th className="py-2 px-4 font-semibold border border-gray-700">Username</th>
-                  <th className="py-2 px-4 font-semibold border border-gray-700">Email</th>
-                  <th className="py-2 px-4 font-semibold border border-gray-700">Album Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id} className="transition-colors">
-                    <td className="border px-4 py-2 text-left border-gray-700">{user.username}</td>
-                    <td className="border px-4 py-2 text-left border-gray-700">{user.email}</td>
-                    <td className="border px-4 py-2 text-left border-gray-700">{user.albumCount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <UsersTable users={users || []} />
         ) : (
           <p className="mt-6 text-gray-500">No users found.</p>
         )}

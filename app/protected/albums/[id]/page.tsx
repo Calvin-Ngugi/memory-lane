@@ -3,19 +3,20 @@ import { Button } from "@/components/ui/button";
 import { ImagesList } from "@/components/images-list";
 import { createClient } from "@/utils/supabase/server";
 
-// Fetch images dynamically based on the album ID
 export default async function ImagesPage(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
   const supabase = await createClient();
+  const params = await props.params;
   const albumId = await params.id;
-  // Fetch authenticated user
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
   if (userError || !user) {
     return <div className="text-center mt-10">Unauthorized. Please log in.</div>;
   }
 
-  // Fetch images for the album
   const { data: images, error } = await supabase
     .from("photos")
     .select("*")
@@ -39,29 +40,21 @@ export default async function ImagesPage(props: { params: Promise<{ id: string }
 
   if (albumError) {
     console.error("Error fetching album:", albumError.message);
-    return (
-      <div>
-        <p>Error loading album. Please try again later.</p>
-      </div>
-    );
+    return <p>Error loading album. Please try again later.</p>;
   }
 
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Image Gallery</h1>
-        {album?.user_id === user.id ?
-          (
+        {album?.user_id === user.id && (
           <Link href={`/protected/albums/${albumId}/upload`}>
             <Button>Upload New Image</Button>
           </Link>
-          ) : (
-            <p></p>
-          )
-        }
+        )}
       </div>
       {images?.length ? (
-        <ImagesList images={images} />
+        <ImagesList initialImages={images} />
       ) : (
         <p className="text-gray-500">No images available for this album.</p>
       )}

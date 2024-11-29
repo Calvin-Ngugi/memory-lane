@@ -1,18 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { ImageModal } from "./imageModal"
+import { useState } from "react";
+import Image from "next/image";
+import { ImageModal } from "./imageModal";
 
 interface Image {
-    id: number
-    image_url: string
-    name: string
-    title: string
-  }
+  id: number;
+  image_url: string;
+  name: string;
+  title: string;
+}
 
-export function ImagesList({ images }: { images: Image[] }){
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null)
+export function ImagesList({ initialImages }: { initialImages: Image[] }) {
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [images, setImages] = useState<Image[]>(initialImages);
+
+  const handleUpdateTitle = (id: number, newTitle: string) => {
+    setImages((prevImages) =>
+      prevImages.map((img) => (img.id === id ? { ...img, title: newTitle } : img))
+    );
+  };
 
   return (
     <>
@@ -37,7 +44,8 @@ export function ImagesList({ images }: { images: Image[] }){
       <ImageModal
         image={selectedImage}
         onClose={() => setSelectedImage(null)}
+        onUpdateTitle={handleUpdateTitle}
       />
     </>
-  )
+  );
 }
