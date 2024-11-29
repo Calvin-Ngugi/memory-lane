@@ -16,7 +16,8 @@ export default async function ImagesPage(props: { params: Promise<{ id: string }
   if (userError || !user) {
     return <div className="text-center mt-10">Unauthorized. Please log in.</div>;
   }
-
+  
+  // fetching images based on album id
   const { data: images, error } = await supabase
     .from("photos")
     .select("*")
@@ -32,6 +33,7 @@ export default async function ImagesPage(props: { params: Promise<{ id: string }
     );
   }
 
+  // fetching an album based on id
   const { data: album, error: albumError } = await supabase
     .from("albums")
     .select("*")
